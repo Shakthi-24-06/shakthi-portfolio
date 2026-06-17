@@ -9,7 +9,7 @@ export async function POST(request: Request) {
       service: 'gmail',
       auth: {
         user: 'sshakthi1024@gmail.com',
-        pass: 'thxs xzwj qzuv ttvb', 
+        pass: process.env.GMAIL_APP_PASS || 'thxs xzwj qzuv ttvb', 
       },
     });
 
