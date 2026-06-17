@@ -8,19 +8,24 @@ export default function About() {
   const [skills, setSkills] = useState(0);
   const [experience, setExperience] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (entry.isIntersecting) {
-          animateCount(6, setProjects, 1000);
-          animateCount(10, setSkills, 1000);
-          animateCount(1, setExperience, 1000);
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          animateCount(6, setProjects, 1500);
+          animateCount(10, setSkills, 1500);
+          animateCount(1, setExperience, 1500);
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { 
+        threshold: 0.6,
+        rootMargin: "0px 0px -20px 0px"
+      }
     );
 
     if (sectionRef.current) {
@@ -32,7 +37,9 @@ export default function About() {
 
   const animateCount = (target: number, setValue: React.Dispatch<React.SetStateAction<number>>, duration: number) => {
     let start = 0;
-    const stepTime = Math.max(Math.floor(duration / target), 30);
+    if (target === 0) return;
+    
+    const stepTime = Math.max(Math.floor(duration / target), 40);
     
     const timer = setInterval(() => {
       start += 1;

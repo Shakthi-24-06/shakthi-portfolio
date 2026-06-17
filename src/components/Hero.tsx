@@ -21,7 +21,8 @@ export default function Hero() {
   }, [roles.length]);
 
   return (
-    <section className="hero-container">
+    <section id="home"className="hero-container">
+    
       <div className="bg-glow-aura"></div>
 
       <div className="hero-content">
