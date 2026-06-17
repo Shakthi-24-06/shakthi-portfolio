@@ -1,4 +1,9 @@
+'use client';
+
+import Image from 'next/image';
+
 import './Skills.css';
+
 
 export default function Skills() {
   const skillsData = [
@@ -6,31 +11,31 @@ export default function Skills() {
       name: 'HTML5', 
       level: 'Advanced', 
       color: '#e34c26',
-      imgSrc: '/skills/html.png'
+      imgSrc: '/shakthi-portfolio/images/skills/html.png'
     },
     { 
       name: 'CSS3', 
       level: 'Advanced', 
       color: '#264de4',
-      imgSrc: '/skills/css.png'
+      imgSrc: '/shakthi-portfolio/images/skills/css.png'
     },
     { 
       name: 'JavaScript', 
       level: 'Intermediate', 
       color: '#f7df1e',
-      imgSrc: '/skills/js.png'
+      imgSrc: '/shakthi-portfolio/images/skills/js.png'
     },
     { 
       name: 'React', 
       level: 'Intermediate', 
       color: '#61dafb',
-      imgSrc: '/skills/react.png'
+      imgSrc: '/shakthi-portfolio/images/skills/react.png'
     },
     { 
       name: 'SQL', 
       level: 'Intermediate', 
       color: '#4479a1',
-      imgSrc: '/skills/sql.png'
+      imgSrc: '/shakthi-portfolio/images/skills/sql.png'
     }
   ];
 

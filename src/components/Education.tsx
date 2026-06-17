@@ -16,13 +16,13 @@ export default function Education() {
       title: "Bachelor of Computer Applications (BCA)",
       institution: "Govindammal Aditanar College for Women, Tiruchendur",
       duration: "2023 - 2026",
-      logoSrc: "/images/college-logo.png"
+      logoSrc: "/shakthi-portfolio/images/college-logo.png"
     },
     {
       title: "Higher Secondary Schooling",
       institution: "Elliott Tuxford Girls Higher Secondary School, Meignanapuram",
       duration: "2021 - 2023",
-      logoSrc: "/images/school-logo.png"
+      logoSrc: "/shakthi-portfolio/images/school-logo.png"
     }
   ];
 
