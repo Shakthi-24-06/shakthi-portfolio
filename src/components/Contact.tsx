@@ -9,11 +9,32 @@ export default function Contact() {
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    alert('Thank you for reaching out! I will get back to you soon.');
-    setFormData({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('Thank you for reaching out! I will get back to you soon.');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        alert('Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      alert('Network error. Failed to send message.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,6 +85,7 @@ export default function Contact() {
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
                 placeholder="Enter your name"
+                disabled={isSubmitting}
               />
             </div>
 
@@ -76,6 +98,7 @@ export default function Contact() {
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 placeholder="Enter your email"
+                disabled={isSubmitting}
               />
             </div>
 
@@ -88,11 +111,12 @@ export default function Contact() {
                 value={formData.message}
                 onChange={(e) => setFormData({...formData, message: e.target.value})}
                 placeholder="Type your message here..."
+                disabled={isSubmitting}
               ></textarea>
             </div>
 
-            <button type="submit" className="contact-submit-btn">
-              Send Message <span>→</span>
+            <button type="submit" className="contact-submit-btn" disabled={isSubmitting}>
+              {isSubmitting ? 'Sending...' : 'Send Message'} <span>→</span>
             </button>
           </form>
         </div>
