@@ -1,41 +1,41 @@
 'use client';
 
-import Image from 'next/image';
-
 import './Skills.css';
 
-
 export default function Skills() {
+  const isProd = process.env.NODE_ENV === 'production';
+  const basePath = isProd ? '/shakthi-portfolio' : '';
+
   const skillsData = [
     { 
       name: 'HTML5', 
       level: 'Advanced', 
       color: '#e34c26',
-      imgSrc: '/shakthi-portfolio/skills/html.png'
+      imgSrc: `${basePath}/skills/html.png`
     },
     { 
       name: 'CSS3', 
       level: 'Advanced', 
       color: '#264de4',
-      imgSrc: '/shakthi-portfolio/skills/css.png'
+      imgSrc: `${basePath}/skills/css.png`
     },
     { 
       name: 'JavaScript', 
       level: 'Intermediate', 
       color: '#f7df1e',
-      imgSrc: '/shakthi-portfolio/skills/js.png'
+      imgSrc: `${basePath}/skills/js.png`
     },
     { 
       name: 'React', 
       level: 'Intermediate', 
       color: '#61dafb',
-      imgSrc: '/shakthi-portfolio/skills/react.png'
+      imgSrc: `${basePath}/skills/react.png`
     },
     { 
       name: 'SQL', 
       level: 'Intermediate', 
       color: '#4479a1',
-      imgSrc: '/shakthi-portfolio/skills/sql.png'
+      imgSrc: `${basePath}/skills/sql.png`
     }
   ];
 
