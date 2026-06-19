@@ -4,11 +4,12 @@ import './Footer.css';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const isProd = process.env.NODE_ENV === 'production';
+  const basePath = isProd ? '/shakthi-portfolio' : '';
 
   return (
     <footer className="footer-section">
       <div className="footer-container">
-        
         <div className="footer-main-grid">
           <div className="footer-brand-column">
             <h2 className="footer-name">Shakthi</h2>
@@ -31,8 +32,12 @@ export default function Footer() {
           <div className="footer-connect-column">
             <h3>Connect</h3>
             <div className="footer-social-row">
-              <a href="#" className="social-circle" target="_blank" rel="noreferrer" title="GitHub">gh</a>
-              <a href="#" className="social-circle" target="_blank" rel="noreferrer" title="LinkedIn">in</a>
+              <a href="https://github.com/Shakthi-24-06" target="_blank" rel="noreferrer" className="social-circle" title="GitHub">
+                <img src={`${basePath}/icons/github.png`} alt="GitHub" className="footer-social-icon" />
+              </a>
+              <a href="https://linkedin.com/" target="_blank" rel="noreferrer" className="social-circle" title="LinkedIn">
+                <img src={`${basePath}/icons/linkedin1.png`} alt="LinkedIn" className="footer-social-icon" />
+              </a>
             </div>
           </div>
         </div>
@@ -40,7 +45,6 @@ export default function Footer() {
         <div className="footer-bottom-bar">
           <p>© {currentYear} Shakthi's Portfolio. All Rights Reserved.</p>
         </div>
-
       </div>
     </footer>
   );

@@ -32,6 +32,12 @@ export default function Skills() {
       imgSrc: `${basePath}/skills/react.png`
     },
     { 
+      name: 'Python', 
+      level: 'Intermediate', 
+      color: '#3776ab',
+      imgSrc: `${basePath}/skills/python.png`
+    },
+    { 
       name: 'SQL', 
       level: 'Intermediate', 
       color: '#4479a1',

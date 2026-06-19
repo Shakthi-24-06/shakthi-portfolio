@@ -11,18 +11,17 @@ export default function Hero() {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % roles.length);
     }, 3000);
-
     return () => clearInterval(interval);
   }, [roles.length]);
 
   return (
-    <section id="home"className="hero-container">
-    
+    <section id="home" className="hero-container">
       <div className="bg-glow-aura"></div>
 
       <div className="hero-content">
@@ -42,17 +41,29 @@ export default function Hero() {
 
         <div className="hero-buttons">
           <a href="#contact" className="btn btn-primary">Hire Me</a>
-          <a href="/resume.pdf" download className="btn btn-secondary">
-            Resume <span>↓</span>
-          </a>
+          <button onClick={() => setIsModalOpen(true)} className="btn btn-secondary">
+            Resume
+          </button>
         </div>
       </div>
 
       <div className="hero-image-container">
         <div className="profile-frame">
-          <div className="profile-placeholder">Photo</div>
+          <img src="/your-photo.jpg" alt="Shakthi" className="profile-img" />
         </div>
       </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="close-btn" onClick={() => setIsModalOpen(false)}>✕</button>
+            <img src="/resume.png" alt="Resume" className="resume-img" />
+            <a href="/resume.png" download="Shakthi_Resume.png" className="btn btn-primary download-btn">
+              Download Resume
+            </a>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

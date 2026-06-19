@@ -16,8 +16,8 @@ export default function About() {
         const [entry] = entries;
         if (entry.isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true;
-          animateCount(6, setProjects, 1500);
-          animateCount(10, setSkills, 1500);
+          animateCount(3, setProjects, 1500);
+          animateCount(6, setSkills, 1500);
           animateCount(1, setExperience, 1500);
           observer.disconnect();
         }

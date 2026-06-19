@@ -8,7 +8,8 @@ interface ProjectType {
   shortDescription: string;
   longDescription: string;
   tags: string[];
-  link: string;
+  githubLink: string;
+  demoLink: string;
 }
 
 export default function Projects() {
@@ -17,33 +18,34 @@ export default function Projects() {
   const projectsData: ProjectType[] = [
     {
       title: "Leaf Disease Detection",
-      shortDescription: "An innovative computer vision application built to detect and analyze plant leaf diseases using image processing.",
-      longDescription: "This project focuses on identifying agricultural plant leaf diseases at an early stage. Developed using Python and OpenCV, the application handles image preprocessing, converts frames into HSV color space, and applies specific pixel-counting masks to isolate infected zones. It provides an efficient method for evaluating crop health and minimizing potential yield loss.",
+      shortDescription: "An innovative computer vision application built to detect and analyze plant leaf diseases.",
+      longDescription: "This project focuses on identifying agricultural plant leaf diseases at an early stage. Developed using Python and OpenCV, it handles image preprocessing, color space conversion, and pixel-counting masks to isolate infected zones.",
       tags: ["Python", "OpenCV", "Image Processing"],
-      link: "#"
+      githubLink: "https://github.com/Shakthi-24-06/leaf-detection",
+      demoLink: "#"
     },
     {
       title: "AI Interface Clone",
-      shortDescription: "A clean, modern local web application replicating a popular conversational AI interface with real-time responsive text layouts.",
-      longDescription: "This project is a highly responsive web interface designed to mirror modern conversational AI platforms. Built using clean HTML5, advanced CSS flexbox/grid mechanics, and native JavaScript, it features dynamic input auto-resizing, interactive sidebar toggles, and smooth focus states to deliver a seamless user experience.",
+      shortDescription: "A clean, modern local web application replicating a popular conversational AI interface.",
+      longDescription: "A highly responsive web interface featuring dynamic input auto-resizing, interactive sidebar toggles, and smooth state transitions using modern CSS and native JavaScript.",
       tags: ["HTML5", "CSS3", "JavaScript"],
-      link: "#"
+      githubLink: "https://github.com/Shakthi-24-06/ai-interface",
+      demoLink: "#"
     },
     {
       title: "Student Performance Analyzer",
-      shortDescription: "A logic-driven database automation project designed to analyze student marks, calculate ranks, and generate academic insights.",
-      longDescription: "A back-end database management system that automates the tracking and evaluation of academic data. Leveraging SQL and PL/SQL stored procedures, the system automates mark aggregation, percentage calculations, grade distributions, and final rank generation while strictly maintaining data integrity through relational tables.",
+      shortDescription: "A logic-driven database automation project designed to analyze academic data.",
+      longDescription: "A back-end system that automates mark aggregation, percentage calculations, and rank generation using SQL and PL/SQL stored procedures, ensuring data integrity.",
       tags: ["SQL", "PL/SQL", "Database Logic"],
-      link: "#"
+      githubLink: "https://github.com/Shakthi-24-06/student-analyzer",
+      demoLink: "#"
     }
   ];
 
   return (
     <section id="projects" className="projects-section">
       <div className="projects-container">
-        <h2 className="projects-title">
-          My <span className="highlight">Projects</span>
-        </h2>
+        <h2 className="projects-title">My <span className="highlight">Projects</span></h2>
         
         <div className="projects-grid">
           {projectsData.map((project, index) => (
@@ -52,13 +54,9 @@ export default function Projects() {
                 <h3>{project.title}</h3>
                 <p className="project-description">{project.shortDescription}</p>
               </div>
-              
               <div className="project-tags">
-                {project.tags.map((tag, tagIndex) => (
-                  <span key={tagIndex} className="tag">{tag}</span>
-                ))}
+                {project.tags.map((tag, tIdx) => <span key={tIdx} className="tag">{tag}</span>)}
               </div>
-              
               <button onClick={() => setActiveProject(project)} className="project-link-btn">
                 View Details <span>→</span>
               </button>
@@ -70,19 +68,19 @@ export default function Projects() {
       {activeProject && (
         <div className="popup-overlay" onClick={() => setActiveProject(null)}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <button className="popup-close-btn" onClick={() => setActiveProject(null)}>
-              &times;
-            </button>
+            <button className="popup-close-btn" onClick={() => setActiveProject(null)}>&times;</button>
             <div className="popup-header">
               <h3>{activeProject.title}</h3>
               <div className="popup-tags">
-                {activeProject.tags.map((tag, tagIndex) => (
-                  <span key={tagIndex} className="tag">{tag}</span>
-                ))}
+                {activeProject.tags.map((tag, tIdx) => <span key={tIdx} className="tag">{tag}</span>)}
               </div>
             </div>
             <div className="popup-body">
               <p>{activeProject.longDescription}</p>
+              <div className="popup-actions">
+                <a href={activeProject.githubLink} target="_blank" rel="noopener noreferrer" className="action-btn github-btn">GitHub</a>
+                <a href={activeProject.demoLink} target="_blank" rel="noopener noreferrer" className="action-btn demo-btn">View Demo</a>
+              </div>
             </div>
           </div>
         </div>
