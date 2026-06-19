@@ -11,29 +11,18 @@ interface EducationType {
 }
 
 export default function Education() {
-  const isProd = process.env.NODE_ENV === 'production';
-  const basePath = isProd ? '/shakthi-portfolio' : '';
-
   const educationData: EducationType[] = [
     {
       title: "Bachelor of Computer Applications (BCA)",
       institution: "Govindammal Aditanar College for Women, Tiruchendur",
       duration: "2023 - 2026",
-<<<<<<< HEAD
-      logoSrc: "/shakthi-portfolio/images/college-logo.png"
-=======
-      logoSrc: `${basePath}/images/college-logo.png`
->>>>>>> master
+      logoSrc: '${basePath}/images/college-logo.png'
     },
     {
       title: "Higher Secondary Schooling",
       institution: "Elliott Tuxford Girls Higher Secondary School, Meignanapuram",
       duration: "2021 - 2023",
-<<<<<<< HEAD
-      logoSrc: "/shakthi-portfolio/images/school-logo.png"
-=======
-      logoSrc: `${basePath}/images/school-logo.png`
->>>>>>> master
+      logoSrc: '${basePath}/images/school-logo.png'
     }
   ];
 
