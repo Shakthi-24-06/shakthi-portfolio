@@ -177,17 +177,43 @@
   color: #0f172a;
 }
 
-.popup-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
 .popup-body p {
   font-size: 1.05rem;
   line-height: 1.7;
   color: #475569;
   margin: 0;
+}
+
+.popup-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.action-btn {
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: transform 0.2s, opacity 0.2s;
+  text-align: center;
+  flex: 1;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.github-btn {
+  background: #1f2937;
+  color: white;
+}
+
+.demo-btn {
+  background: #0284c7;
+  color: white;
 }
 
 @keyframes fadeIn {
