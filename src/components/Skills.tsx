@@ -11,31 +11,51 @@ export default function Skills() {
       name: 'HTML5', 
       level: 'Advanced', 
       color: '#e34c26',
+<<<<<<< HEAD
       imgSrc: `${basePath}/skills/html.png`
+=======
+      imgSrc: '/shakthi-portfolio/skills/html.png'
+>>>>>>> 8c157f3140b7e52ffc8ad75c2cdcb597fd65fe92
     },
     { 
       name: 'CSS3', 
       level: 'Advanced', 
       color: '#264de4',
+<<<<<<< HEAD
       imgSrc: `${basePath}/skills/css.png`
+=======
+      imgSrc: '/shakthi-portfolio/skills/css.png'
+>>>>>>> 8c157f3140b7e52ffc8ad75c2cdcb597fd65fe92
     },
     { 
       name: 'JavaScript', 
       level: 'Intermediate', 
       color: '#f7df1e',
+<<<<<<< HEAD
       imgSrc: `${basePath}/skills/js.png`
+=======
+      imgSrc: '/shakthi-portfolio/skills/js.png'
+>>>>>>> 8c157f3140b7e52ffc8ad75c2cdcb597fd65fe92
     },
     { 
       name: 'React', 
       level: 'Intermediate', 
       color: '#61dafb',
+<<<<<<< HEAD
       imgSrc: `${basePath}/skills/react.png`
+=======
+      imgSrc: '/shakthi-portfolio/skills/react.png'
+>>>>>>> 8c157f3140b7e52ffc8ad75c2cdcb597fd65fe92
     },
     { 
       name: 'SQL', 
       level: 'Intermediate', 
       color: '#4479a1',
+<<<<<<< HEAD
       imgSrc: `${basePath}/skills/sql.png`
+=======
+      imgSrc: '/shakthi-portfolio/skills/sql.png'
+>>>>>>> 8c157f3140b7e52ffc8ad75c2cdcb597fd65fe92
     }
   ];
 
