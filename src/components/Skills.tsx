@@ -1,12 +1,6 @@
 'use client';
 
-<<<<<<< HEAD
-import Image from 'next/image';
-
-=======
->>>>>>> master
 import './Skills.css';
-
 
 export default function Skills() {
   const isProd = process.env.NODE_ENV === 'production';
@@ -17,39 +11,24 @@ export default function Skills() {
       name: 'HTML5', 
       level: 'Advanced', 
       color: '#e34c26',
-<<<<<<< HEAD
-      imgSrc: '/shakthi-portfolio/skills/html.png'
-=======
       imgSrc: `${basePath}/skills/html.png`
->>>>>>> master
     },
     { 
       name: 'CSS3', 
       level: 'Advanced', 
       color: '#264de4',
-<<<<<<< HEAD
-      imgSrc: '/shakthi-portfolio/skills/css.png'
-=======
       imgSrc: `${basePath}/skills/css.png`
->>>>>>> master
     },
     { 
       name: 'JavaScript', 
       level: 'Intermediate', 
       color: '#f7df1e',
-<<<<<<< HEAD
-      imgSrc: '/shakthi-portfolio/skills/js.png'
-=======
       imgSrc: `${basePath}/skills/js.png`
->>>>>>> master
     },
     { 
       name: 'React', 
       level: 'Intermediate', 
       color: '#61dafb',
-<<<<<<< HEAD
-      imgSrc: '/shakthi-portfolio/skills/react.png'
-=======
       imgSrc: `${basePath}/skills/react.png`
     },
     { 
@@ -57,17 +36,12 @@ export default function Skills() {
       level: 'Intermediate', 
       color: '#3776ab',
       imgSrc: `${basePath}/skills/python.png`
->>>>>>> master
     },
     { 
       name: 'SQL', 
       level: 'Intermediate', 
       color: '#4479a1',
-<<<<<<< HEAD
-      imgSrc: '/shakthi-portfolio/skills/sql.png'
-=======
       imgSrc: `${basePath}/skills/sql.png`
->>>>>>> master
     }
   ];
 
