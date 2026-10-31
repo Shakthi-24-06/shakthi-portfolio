@@ -38,13 +38,13 @@ export const LeafAlgorithmModal: React.FC<LeafAlgorithmModalProps> = ({ isOpen, 
               </div>
               <div>
                 <h3 className="font-bold text-white text-sm sm:text-base flex items-center gap-2">
-                  <span>Canny Edge Algorithm Architecture</span>
+                  <span>Leaf Disease Detection Pipeline</span>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono">
                     OpenCV • Python
                   </span>
                 </h3>
                 <p className="text-xs text-slate-400">
-                  Leaf Disease Detection Using Canny Edge Algorithm
+                  Four-Stage Image Processing Workflow
                 </p>
               </div>
             </div>
@@ -64,64 +64,82 @@ export const LeafAlgorithmModal: React.FC<LeafAlgorithmModalProps> = ({ isOpen, 
             <div className="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 flex items-start gap-3">
               <ShieldCheck className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
               <div className="text-xs text-slate-300">
-                <span className="font-bold text-white">Algorithm Methodology: </span>
-                This system operates purely on classical deterministic Computer Vision principles. By isolating high gradient transitions between healthy chlorophyll tissue and necrotic lesion boundaries, it highlights damaged crop regions with high fidelity and zero training bias.
+                <span className="font-bold text-white">Algorithm Overview: </span>
+                An image-processing application that uses Canny Edge Detection to identify potentially damaged regions in crop leaf images and display results with remedies.
               </div>
             </div>
 
+            {/* The Exact 4 Stages */}
             <div className="space-y-3">
               <h4 className="font-bold text-white text-sm flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-emerald-400" />
-                The 4-Stage Image Processing Pipeline
+                The Four-Stage Image Processing Workflow
               </h4>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-                  <div className="font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-mono">1</span>
-                    Gaussian Smoothing Filter
+                {/* STEP 01 */}
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                  <div className="font-bold text-emerald-400 flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-[10px] font-mono">01</span>
+                    STEP 01 — GAUSSIAN BLUR
                   </div>
-                  <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Convolves the raw RGB leaf input with a 5×5 Gaussian kernel (sigma=1.4) to suppress camera noise, specular sun glints, and dust particles that would otherwise trigger false edge responses.
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    <strong>Description:</strong> Apply Gaussian Blur to the input leaf image to reduce noise and smooth the image before edge detection.
+                  </p>
+                  <p className="text-slate-400 text-[11px]">
+                    <strong>Visual:</strong> Shows the original leaf image and its Gaussian-blurred result.
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-                  <div className="font-bold text-cyan-400 flex items-center gap-1.5 mb-1">
-                    <span className="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center text-[10px] font-mono">2</span>
-                    Sobel Gradient Computation
+                {/* STEP 02 */}
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                  <div className="font-bold text-cyan-400 flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded-full bg-cyan-500/20 flex items-center justify-center text-[10px] font-mono">02</span>
+                    STEP 02 — CANNY EDGE DETECTION
                   </div>
-                  <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Applies orthogonal Sobel kernels (Kx and Ky) across the smoothed grayscale matrix to calculate edge magnitude G = sqrt(Gx² + Gy²) and gradient direction theta = arctan(Gy / Gx).
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    <strong>Description:</strong> Apply Canny Edge Detection to identify edges and boundaries in the processed leaf image.
+                  </p>
+                  <p className="text-slate-400 text-[11px]">
+                    <strong>Visual:</strong> Displays the black-and-white edge detection output.
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-                  <div className="font-bold text-purple-400 flex items-center gap-1.5 mb-1">
-                    <span className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center text-[10px] font-mono">3</span>
-                    Non-Maximum Suppression (NMS)
+                {/* STEP 03 */}
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                  <div className="font-bold text-purple-400 flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center text-[10px] font-mono">03</span>
+                    STEP 03 — MASK OVERLAY
                   </div>
-                  <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Scans along the gradient direction vector and suppresses all non-peak pixel values, effectively thinning broad fuzzy lesion edges down to razor-sharp 1-pixel wide ridges.
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    <strong>Description:</strong> Apply the detected edge or damage-region mask as an overlay on the original leaf image to highlight the detected regions.
+                  </p>
+                  <p className="text-slate-400 text-[11px]">
+                    <strong>Visual:</strong> Shows the original leaf image with the processed mask overlay.
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
-                  <div className="font-bold text-amber-400 flex items-center gap-1.5 mb-1">
-                    <span className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center text-[10px] font-mono">4</span>
-                    Hysteresis Dual Thresholding
+                {/* STEP 04 */}
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5">
+                  <div className="font-bold text-amber-400 flex items-center gap-1.5">
+                    <span className="w-5 h-5 rounded-full bg-amber-500/20 flex items-center justify-center text-[10px] font-mono">04</span>
+                    STEP 04 — PREDICTION AND REMEDY
                   </div>
-                  <p className="text-slate-400 text-[11px] leading-relaxed">
-                    Applies high (T2=150) and low (T1=50) thresholds. Pixels exceeding T2 are definite edges; pixels below T1 are discarded. Pixels in between are retained only if connected to high-threshold edges.
+                  <p className="text-slate-300 text-[11px] leading-relaxed">
+                    <strong>Description:</strong> Display the application's actual detection result and the corresponding suggested remedy.
+                  </p>
+                  <p className="text-slate-400 text-[11px]">
+                    <strong>Visual:</strong> Shows the final result and remedy information in a result panel.
                   </p>
                 </div>
               </div>
             </div>
 
+            {/* Python OpenCV Implementation */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-mono text-slate-400">
                 <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
-                  <Terminal className="w-3.5 h-3.5" /> canny_leaf_defect_detection.py
+                  <Terminal className="w-3.5 h-3.5" /> leaf_disease_canny_pipeline.py
                 </span>
                 <span>OpenCV 4.x / NumPy</span>
               </div>
@@ -129,26 +147,35 @@ export const LeafAlgorithmModal: React.FC<LeafAlgorithmModalProps> = ({ isOpen, 
                 <pre>{`import cv2
 import numpy as np
 
-def analyze_crop_leaf(image_path: str, low_thresh: int = 50, high_thresh: int = 150):
-    """
-    Identifies potentially damaged regions on crop leaves
-    using Canny edge gradient analysis.
-    """
-    # 1. Read input image and convert to grayscale
-    img_rgb = cv2.imread(image_path)
-    gray = cv2.cvtColor(img_rgb, cv2.COLOR_BGR2GRAY)
+def run_leaf_disease_pipeline(image_path: str):
+    # Step 1: Read input and apply Gaussian Blur for noise reduction
+    image_rgb = cv2.imread(image_path)
+    gray = cv2.cvtColor(image_rgb, cv2.COLOR_BGR2GRAY)
+    blurred = cv2.GaussianBlur(gray, (5, 5), 1.5)
 
-    # 2. Reduce ambient sensor noise
-    blurred = cv2.GaussianBlur(gray, (5, 5), sigmaX=1.4)
+    # Step 2: Apply Canny Edge Detection to identify boundaries
+    edges = cv2.Canny(blurred, threshold1=50, threshold2=150)
 
-    # 3. Apply Canny Edge Detection with dual thresholds
-    edges = cv2.Canny(blurred, threshold1=low_thresh, threshold2=high_thresh)
+    # Step 3: Create damage-region mask and overlay on original image
+    kernel = np.ones((3, 3), np.uint8)
+    dilated_edges = cv2.dilate(edges, kernel, iterations=1)
+    mask_overlay = image_rgb.copy()
+    mask_overlay[dilated_edges > 0] = [0, 0, 255] # Highlight detected regions
 
-    # 4. Extract closed contour boundaries of defective zones
+    # Step 4: Determine detection outcome and return suggested remedy
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
-    damaged_regions = [c for c in contours if cv2.contourArea(c) > 25]
-    return edges, damaged_regions`}</pre>
+    damage_area = sum(cv2.contourArea(c) for c in contours if cv2.contourArea(c) > 20)
+
+    result = {
+        "status": "Damaged Regions Detected" if damage_area > 50 else "Healthy Leaf",
+        "damage_area": damage_area,
+        "remedy": (
+            "Prune infected foliage, apply recommended copper-based organic spray, "
+            "and maintain proper soil drainage."
+            if damage_area > 50 else "No treatment required. Maintain standard crop care."
+        )
+    }
+    return blurred, edges, mask_overlay, result`}</pre>
               </div>
             </div>
           </div>
