@@ -1,30 +1,32 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GraduationCap, Lightbulb, Code2, Sparkles, Calendar } from 'lucide-react';
+import { GraduationCap, Lightbulb, Code2, Sparkles, Calendar, Award } from 'lucide-react';
 import { AnimeCharacter } from './AnimeCharacter';
 import { soundManager } from '../utils/soundEffects';
 
 export const About: React.FC = () => {
-  const educationMilestones = [
+  const educationItems = [
     {
-      degree: 'Bachelor of Computer Applications (BCA)',
+      label: 'EDUCATION 01',
+      courseLabel: 'Course',
+      course: 'BCA',
+      institutionLabel: 'College',
       institution: 'Govindammal Aditanar College for Women',
-      duration: '2023 – 2026',
-      score: 'CGPA: 8.19',
-      scoreBadge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
-      description:
-        'Focused on database architecture, web programming, algorithms, and practical software engineering. Developed major projects addressing real community needs.',
-      skillsLearned: ['Python', 'SQL & Relational DBs', 'Web Architecture', 'Software Engineering'],
+      year: '2023–2026',
+      scoreLabel: 'CGPA',
+      score: '8.19',
+      scoreBadge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.2)]',
     },
     {
-      degree: 'Higher Secondary Certificate (HSC)',
+      label: 'EDUCATION 02',
+      courseLabel: 'Course',
+      course: 'HSC',
+      institutionLabel: 'School',
       institution: 'Elliott Tuxford Girls Higher Secondary School',
-      duration: '2022 – 2023',
+      year: '2022–2023',
+      scoreLabel: 'Percentage',
       score: '85.6%',
-      scoreBadge: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
-      description:
-        'Completed higher secondary education with strong analytical foundations in Computer Science and Mathematics, laying the groundwork for software development.',
-      skillsLearned: ['Computer Science Fundamentals', 'Problem Solving', 'Mathematics'],
+      scoreBadge: 'bg-purple-500/15 text-purple-300 border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.2)]',
     },
   ];
 
@@ -54,9 +56,9 @@ export const About: React.FC = () => {
           </p>
         </div>
 
-        {/* Content Layout: Character in About Pose + Info Panels */}
+        {/* Content Layout: Character in About Pose + Compact Clean Education Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Column: Character in Thoughtful / Creative Pose */}
+          {/* Left Column: Character in Thoughtful Pose */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
             <div className="relative">
               <AnimeCharacter pose="about" size="lg" interactive={true} />
@@ -93,67 +95,72 @@ export const About: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Interactive Education Visual Timeline */}
+          {/* Right Column: Clean Compact Education Cards */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2.5 mb-2">
               <GraduationCap className="w-5 h-5 text-cyan-400" />
-              <h3 className="text-xl font-bold text-white font-['Outfit']">
-                Education & Academic Foundations
+              <h3 className="text-xl sm:text-2xl font-bold text-white font-['Outfit']">
+                Education
               </h3>
             </div>
 
-            {/* Visual Timeline Container */}
-            <div className="relative border-l-2 border-cyan-500/30 pl-6 sm:pl-8 ml-2 sm:ml-4 space-y-8">
-              {educationMilestones.map((edu, idx) => (
+            {/* Clean Compact Cards */}
+            <div className="space-y-4">
+              {educationItems.map((edu, idx) => (
                 <motion.div
-                  key={edu.degree}
-                  initial={{ opacity: 0, x: 25 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  key={edu.course}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: idx * 0.2 }}
+                  transition={{ duration: 0.5, delay: idx * 0.15 }}
                   onMouseEnter={() => soundManager.playHover()}
-                  className="relative glass-panel p-5 sm:p-6 rounded-2xl border border-slate-700/60 hover:border-cyan-500/40 transition-all group"
+                  className="glass-panel p-6 rounded-2xl border border-slate-700/60 hover:border-cyan-500/40 transition-all duration-300 shadow-lg group hover:shadow-[0_10px_30px_rgba(0,240,255,0.15)] flex flex-col justify-between"
                 >
-                  {/* Glowing Milestone Marker Node on the line */}
-                  <div className="absolute -left-[31px] sm:-left-[39px] top-6 w-4 h-4 rounded-full bg-[#030712] border-2 border-cyan-400 shadow-[0_0_12px_#00f0ff] group-hover:scale-125 transition-transform" />
-
-                  {/* Header Row: Degree, Score & Duration */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800">
-                    <div>
-                      <h4 className="text-base sm:text-lg font-bold text-white group-hover:text-cyan-300 transition-colors">
-                        {edu.degree}
-                      </h4>
-                      <p className="text-xs sm:text-sm text-cyan-400/90 font-medium">
-                        {edu.institution}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2 self-start sm:self-auto">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${edu.scoreBadge}`}>
-                        {edu.score}
-                      </span>
-                      <span className="flex items-center gap-1 text-[11px] font-mono text-slate-400">
-                        <Calendar className="w-3 h-3 text-slate-400" />
-                        {edu.duration}
-                      </span>
-                    </div>
+                  {/* Card Header Tag */}
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-4">
+                    <span className="text-[10px] font-mono tracking-wider font-bold text-slate-400 uppercase">
+                      {edu.label}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs font-mono text-cyan-400">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{edu.year}</span>
+                    </span>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-300 mt-3 leading-relaxed">
-                    {edu.description}
-                  </p>
+                  {/* Course & Institution Information */}
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                    <div className="sm:col-span-8 space-y-2">
+                      <div>
+                        <span className="text-[10px] uppercase font-mono text-slate-500 block">
+                          {edu.courseLabel}
+                        </span>
+                        <h4 className="text-xl sm:text-2xl font-black text-white group-hover:text-cyan-300 transition-colors">
+                          {edu.course}
+                        </h4>
+                      </div>
 
-                  {/* Key Highlights */}
-                  <div className="flex flex-wrap gap-1.5 mt-3 pt-2">
-                    {edu.skillsLearned.map((s) => (
-                      <span
-                        key={s}
-                        className="px-2 py-0.5 rounded-md bg-slate-800/80 border border-slate-700/60 text-[11px] text-slate-300"
-                      >
-                        {s}
-                      </span>
-                    ))}
+                      <div>
+                        <span className="text-[10px] uppercase font-mono text-slate-500 block">
+                          {edu.institutionLabel}
+                        </span>
+                        <p className="text-xs sm:text-sm text-slate-300 font-medium">
+                          {edu.institution}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Academic Score Pill */}
+                    <div className="sm:col-span-4 flex sm:justify-end">
+                      <div className={`px-4 py-2.5 rounded-xl border flex flex-col items-center sm:items-end justify-center ${edu.scoreBadge}`}>
+                        <span className="text-[10px] uppercase font-mono text-slate-400 flex items-center gap-1">
+                          <Award className="w-3 h-3 text-cyan-400" />
+                          <span>{edu.scoreLabel}</span>
+                        </span>
+                        <span className="text-base sm:text-lg font-extrabold font-mono text-white">
+                          {edu.score}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               ))}
