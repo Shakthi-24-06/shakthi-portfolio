@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MapPin, Send, CheckCircle2, Copy, Sparkles, AlertCircle } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, Copy, Sparkles, AlertCircle, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import emailjs from '@emailjs/browser';
 import { AnimeCharacter } from './AnimeCharacter';
@@ -12,14 +12,14 @@ export const Contact: React.FC = () => {
     name: '',
     email: '',
     message: '',
-    botcheck: '', // Honeypot spam protection
+    botcheck: '', // Anti-spam honeypot field
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [copied, setCopied] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [deliveryMethod, setDeliveryMethod] = useState<'service' | 'mailto'>('service');
+  const [showMailtoFallback, setShowMailtoFallback] = useState(false);
 
   const emailAddress = 'ssshakthi1024@gmail.com';
   const linkedinUrl = 'https://www.linkedin.com/in/shakthi-sivakumar';
@@ -35,15 +35,22 @@ export const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
+    setShowMailtoFallback(false);
 
-    // Spam honeypot detection
+    // 1. Spam honeypot detection
     if (formData.botcheck) {
-      return; // Silently discard bot submission
+      // Silently discard bot submissions
+      return;
     }
 
-    // 1. Validation
+    // 2. Form field validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setErrorMessage('Please fill in all required fields (Name, Email, and Message).');
+      return;
+    }
+
+    if (formData.name.trim().length < 2) {
+      setErrorMessage('Please enter a valid name (at least 2 characters).');
       return;
     }
 
@@ -53,85 +60,58 @@ export const Contact: React.FC = () => {
       return;
     }
 
+    if (formData.message.trim().length < 10) {
+      setErrorMessage('Please provide a message with at least 10 characters.');
+      return;
+    }
+
     setIsSubmitting(true);
     soundManager.playClick();
 
-    // Check environment variables for EmailJS or Web3Forms
+    // Check environment variables for EmailJS (Gmail Service)
     const emailJsService = import.meta.env.VITE_EMAILJS_SERVICE_ID;
     const emailJsTemplate = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const emailJsPublic = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-    const web3FormsKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
 
-    let success = false;
+    const isEmailJsConfigured = Boolean(
+      emailJsService &&
+      emailJsTemplate &&
+      emailJsPublic &&
+      !emailJsService.includes('your_') &&
+      !emailJsTemplate.includes('your_') &&
+      !emailJsPublic.includes('your_')
+    );
+
+    if (!isEmailJsConfigured) {
+      setIsSubmitting(false);
+      setShowMailtoFallback(true);
+      setErrorMessage(
+        'Direct Gmail delivery setup pending: Please configure VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_EMAILJS_PUBLIC_KEY in your .env file. In the meantime, you can click below to send directly via your email client.'
+      );
+      return;
+    }
 
     try {
-      // Option A: EmailJS Service
-      if (emailJsService && emailJsTemplate && emailJsPublic) {
-        await emailjs.send(
-          emailJsService,
-          emailJsTemplate,
-          {
-            from_name: formData.name.trim(),
-            reply_to: formData.email.trim(),
-            to_email: emailAddress,
-            message: formData.message.trim(),
-          },
-          emailJsPublic
-        );
-        success = true;
-        setDeliveryMethod('service');
-      }
-      // Option B: Web3Forms API
-      else if (web3FormsKey) {
-        const response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            access_key: web3FormsKey,
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            message: formData.message.trim(),
-            replyto: formData.email.trim(),
-            subject: `Portfolio Message from ${formData.name.trim()}`,
-          }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          success = true;
-          setDeliveryMethod('service');
-        } else {
-          throw new Error(data.message || 'Delivery service was unable to send email.');
-        }
-      }
-      // Option C: Secure Client-Side Direct Email Dispatch
-      else {
-        // Construct mailto URI with prefilled fields to guarantee delivery
-        const subject = encodeURIComponent(`Portfolio Inquiry from ${formData.name.trim()}`);
-        const body = encodeURIComponent(
-          `Hi Shakthi,\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}\n`
-        );
-        window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
-        success = true;
-        setDeliveryMethod('mailto');
-      }
+      const templateParams = {
+        name: formData.name.trim(),
+        from_name: formData.name.trim(),
+        email: formData.email.trim(),
+        from_email: formData.email.trim(),
+        reply_to: formData.email.trim(),
+        to_name: 'Shakthi Sivakumar',
+        to_email: emailAddress,
+        message: formData.message.trim(),
+      };
 
-      if (success) {
-        // Record in local cache
-        try {
-          const cache = JSON.parse(localStorage.getItem('shakthi_sent_messages') || '[]');
-          cache.push({
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            message: formData.message.trim(),
-            date: new Date().toISOString(),
-          });
-          localStorage.setItem('shakthi_sent_messages', JSON.stringify(cache));
-        } catch {
-          // Ignore storage errors
-        }
+      const result = await emailjs.send(
+        emailJsService,
+        emailJsTemplate,
+        templateParams,
+        emailJsPublic
+      );
+
+      if (result.status === 200 || result.text === 'OK') {
+        setIsSent(true);
 
         confetti({
           particleCount: 90,
@@ -139,12 +119,19 @@ export const Contact: React.FC = () => {
           origin: { y: 0.7 },
           colors: ['#00f0ff', '#a855f7', '#38bdf8', '#c084fc'],
         });
-
-        setIsSent(true);
+      } else {
+        throw new Error(`Email service responded with status code: ${result.status}`);
       }
     } catch (err: unknown) {
-      const errorText = err instanceof Error ? err.message : 'Failed to send message.';
-      setErrorMessage(`${errorText} You can also email me directly at ${emailAddress}.`);
+      const errorMsg =
+        err && typeof err === 'object' && 'text' in err
+          ? String((err as { text: unknown }).text)
+          : err instanceof Error
+          ? err.message
+          : 'Unable to deliver message at this time.';
+
+      setShowMailtoFallback(true);
+      setErrorMessage(`Delivery failed: ${errorMsg}. Please check your connection or send directly via your mail client.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -284,13 +271,28 @@ export const Contact: React.FC = () => {
                 Send a Message
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mb-6">
-                Deliver your message directly to my inbox at <span className="text-cyan-300 font-mono">{emailAddress}</span>.
+                Deliver your message directly to my Gmail inbox at <span className="text-cyan-300 font-mono">{emailAddress}</span>.
               </p>
 
               {errorMessage && (
-                <div className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{errorMessage}</span>
+                <div className="mb-5 p-4 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs space-y-2">
+                  <div className="flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5" />
+                    <span className="leading-relaxed">{errorMessage}</span>
+                  </div>
+                  {showMailtoFallback && (
+                    <div className="pt-2 pl-6">
+                      <a
+                        href={`mailto:${emailAddress}?subject=${encodeURIComponent(`Portfolio Message from ${formData.name.trim() || 'Visitor'}`)}&body=${encodeURIComponent(
+                          `Hi Shakthi,\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}\n`
+                        )}`}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-semibold transition-colors"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Send via Email Client (Pre-filled)</span>
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -305,10 +307,10 @@ export const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-white">
-                      Message Sent Successfully!
+                      Message Delivered Successfully!
                     </h4>
-                    <p className="text-xs text-slate-300 mt-1 max-w-md mx-auto">
-                      Thank you, <span className="text-cyan-300 font-semibold">{formData.name}</span>. Your message has been dispatched {deliveryMethod === 'service' ? 'via direct inbox delivery' : 'via default email client'} to <span className="text-emerald-400 font-mono font-semibold">{emailAddress}</span>.
+                    <p className="text-xs text-slate-300 mt-1 max-w-md mx-auto leading-relaxed">
+                      Thank you, <span className="text-cyan-300 font-semibold">{formData.name}</span>. Your message has reached <span className="text-emerald-400 font-mono font-semibold">{emailAddress}</span>. I will get back to you at <span className="text-cyan-300 font-mono">{formData.email}</span> shortly.
                     </p>
                   </div>
 
@@ -318,21 +320,21 @@ export const Contact: React.FC = () => {
                         setIsSent(false);
                         setFormData({ name: '', email: '', message: '', botcheck: '' });
                       }}
-                      className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:text-white"
+                      className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:text-white transition-colors"
                     >
                       Send Another Message
                     </button>
                     <a
                       href={`mailto:${emailAddress}`}
-                      className="px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30"
+                      className="px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-colors"
                     >
-                      Open Email Client
+                      Direct Gmail
                     </a>
                   </div>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Anti-spam Honeypot field (hidden from genuine users) */}
+                  {/* Anti-spam Honeypot field (hidden from genuine visitors) */}
                   <input
                     type="text"
                     name="botcheck"
@@ -341,6 +343,7 @@ export const Contact: React.FC = () => {
                     className="hidden"
                     tabIndex={-1}
                     autoComplete="off"
+                    aria-hidden="true"
                   />
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
