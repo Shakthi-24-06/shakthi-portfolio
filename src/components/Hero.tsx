@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Sparkles, GraduationCap, Briefcase, MapPin, ChevronRight, Terminal } from 'lucide-react';
+import { FileText, Sparkles, ChevronRight, Terminal } from 'lucide-react';
 import { AnimeCharacter } from './AnimeCharacter';
 import { soundManager } from '../utils/soundEffects';
 
@@ -76,26 +76,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
             "Turning ideas into meaningful digital experiences."
           </p>
 
-          {/* Information Badges */}
-          <div className="flex flex-wrap gap-2.5 pt-1">
-            <div className="glass-panel px-3.5 py-2 rounded-xl flex items-center gap-2 border border-cyan-500/30 text-xs text-slate-200">
-              <GraduationCap className="w-4 h-4 text-cyan-400" />
-              <span className="font-semibold">BCA Graduate</span>
-            </div>
-
-            <div className="glass-panel px-3.5 py-2 rounded-xl flex items-center gap-2 border border-purple-500/30 text-xs text-slate-200">
-              <Briefcase className="w-4 h-4 text-purple-400" />
-              <span className="font-semibold">Full Stack Developer Intern</span>
-            </div>
-
-            <div className="glass-panel px-3.5 py-2 rounded-xl flex items-center gap-2 border border-blue-500/30 text-xs text-slate-200">
-              <MapPin className="w-4 h-4 text-blue-400" />
-              <span className="font-semibold">Tamil Nadu, India</span>
-            </div>
-          </div>
-
-          {/* Action CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          {/* Action CTA Buttons (Clean & spacious after removing information badges) */}
+          <div className="flex flex-wrap items-center gap-4 pt-3">
             <button
               onClick={handleScrollToProjects}
               onMouseEnter={() => soundManager.playHover()}
