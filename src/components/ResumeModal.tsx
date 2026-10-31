@@ -99,8 +99,8 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               <div className="text-xs space-y-1 sm:text-right text-slate-400">
                 <div className="flex sm:justify-end items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5 text-cyan-400" />
-                  <a href="mailto:ssshakthi1024@gmail.com" className="hover:text-cyan-300">
-                    ssshakthi1024@gmail.com
+                  <a href="mailto:sshakthi1024@gmail.com" className="hover:text-cyan-300">
+                    sshakthi1024@gmail.com
                   </a>
                 </div>
                 <div className="flex sm:justify-end items-center gap-1.5">
