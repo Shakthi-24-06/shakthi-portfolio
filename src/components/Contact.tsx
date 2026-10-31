@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Send, CheckCircle2, Copy, Sparkles, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import emailjs from '@emailjs/browser';
 import { AnimeCharacter } from './AnimeCharacter';
 import { soundManager } from '../utils/soundEffects';
 import { GithubIcon, LinkedinIcon } from './Icons';
@@ -10,17 +11,18 @@ export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: '',
     message: '',
+    botcheck: '', // Honeypot spam protection
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [copied, setCopied] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [deliveryMethod, setDeliveryMethod] = useState<'service' | 'mailto'>('service');
 
-  const emailAddress = 'sshakthi1024@gmail.com';
-  const linkedinUrl = 'https://linkedin.com/in/shakthi-sivakumar';
+  const emailAddress = 'ssshakthi1024@gmail.com';
+  const linkedinUrl = 'https://www.linkedin.com/in/shakthi-sivakumar';
   const githubUrl = 'https://github.com/Shakthi-24-06';
 
   const handleCopyEmail = () => {
@@ -30,17 +32,23 @@ export const Contact: React.FC = () => {
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
+    // Spam honeypot detection
+    if (formData.botcheck) {
+      return; // Silently discard bot submission
+    }
+
+    // 1. Validation
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setErrorMessage('Please fill in all required fields.');
+      setErrorMessage('Please fill in all required fields (Name, Email, and Message).');
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(formData.email.trim())) {
       setErrorMessage('Please enter a valid email address.');
       return;
     }
@@ -48,40 +56,98 @@ export const Contact: React.FC = () => {
     setIsSubmitting(true);
     soundManager.playClick();
 
-    // 1. Save message locally
+    // Check environment variables for EmailJS or Web3Forms
+    const emailJsService = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const emailJsTemplate = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const emailJsPublic = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    const web3FormsKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+
+    let success = false;
+
     try {
-      const existing = JSON.parse(localStorage.getItem('shakthi_contact_messages') || '[]');
-      existing.push({
-        ...formData,
-        date: new Date().toISOString(),
-      });
-      localStorage.setItem('shakthi_contact_messages', JSON.stringify(existing));
-    } catch {
-      // Local storage fallback
-    }
+      // Option A: EmailJS Service
+      if (emailJsService && emailJsTemplate && emailJsPublic) {
+        await emailjs.send(
+          emailJsService,
+          emailJsTemplate,
+          {
+            from_name: formData.name.trim(),
+            reply_to: formData.email.trim(),
+            to_email: emailAddress,
+            message: formData.message.trim(),
+          },
+          emailJsPublic
+        );
+        success = true;
+        setDeliveryMethod('service');
+      }
+      // Option B: Web3Forms API
+      else if (web3FormsKey) {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            access_key: web3FormsKey,
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            message: formData.message.trim(),
+            replyto: formData.email.trim(),
+            subject: `Portfolio Message from ${formData.name.trim()}`,
+          }),
+        });
+        const data = await response.json();
+        if (data.success) {
+          success = true;
+          setDeliveryMethod('service');
+        } else {
+          throw new Error(data.message || 'Delivery service was unable to send email.');
+        }
+      }
+      // Option C: Secure Client-Side Direct Email Dispatch
+      else {
+        // Construct mailto URI with prefilled fields to guarantee delivery
+        const subject = encodeURIComponent(`Portfolio Inquiry from ${formData.name.trim()}`);
+        const body = encodeURIComponent(
+          `Hi Shakthi,\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}\n`
+        );
+        window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
+        success = true;
+        setDeliveryMethod('mailto');
+      }
 
-    // 2. Trigger Confetti
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.7 },
-      colors: ['#00f0ff', '#a855f7', '#38bdf8', '#c084fc'],
-    });
+      if (success) {
+        // Record in local cache
+        try {
+          const cache = JSON.parse(localStorage.getItem('shakthi_sent_messages') || '[]');
+          cache.push({
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            message: formData.message.trim(),
+            date: new Date().toISOString(),
+          });
+          localStorage.setItem('shakthi_sent_messages', JSON.stringify(cache));
+        } catch {
+          // Ignore storage errors
+        }
 
-    // 3. Prepare direct mailto URL
-    const mailtoSubject = encodeURIComponent(
-      formData.subject.trim() || `Portfolio Inquiry from ${formData.name}`
-    );
-    const mailtoBody = encodeURIComponent(
-      `Hi Shakthi,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}\n`
-    );
-    const mailtoUrl = `mailto:${emailAddress}?subject=${mailtoSubject}&body=${mailtoBody}`;
+        confetti({
+          particleCount: 90,
+          spread: 70,
+          origin: { y: 0.7 },
+          colors: ['#00f0ff', '#a855f7', '#38bdf8', '#c084fc'],
+        });
 
-    setTimeout(() => {
+        setIsSent(true);
+      }
+    } catch (err: unknown) {
+      const errorText = err instanceof Error ? err.message : 'Failed to send message.';
+      setErrorMessage(`${errorText} You can also email me directly at ${emailAddress}.`);
+    } finally {
       setIsSubmitting(false);
-      setIsSent(true);
-      window.location.href = mailtoUrl;
-    }, 600);
+    }
   };
 
   return (
@@ -96,22 +162,19 @@ export const Contact: React.FC = () => {
         <div className="text-center space-y-3 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/80 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Connect & Collaborate</span>
+            <span>Get in Touch</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white font-['Outfit'] tracking-tight">
-            Let's Create Something{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-purple-400">
-              Amazing Together!
-            </span>
+            Let's Connect!
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
-            Whether you have an exciting software project, a job opportunity, or simply want to connect, I would love to hear from you.
+            Have a project in mind or just want to say hi? I'd love to hear from you!
           </p>
         </div>
 
         {/* Content Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Column: Direct Info & Anime Girl in Contact Pose */}
+          {/* Left Column: Direct Info & Anime Character */}
           <div className="lg:col-span-5 flex flex-col items-center lg:items-start space-y-8">
             <div className="w-full glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/30 space-y-6">
               <h3 className="text-lg font-bold text-white font-['Outfit']">
@@ -131,7 +194,7 @@ export const Contact: React.FC = () => {
                       </div>
                       <a
                         href={`mailto:${emailAddress}`}
-                        className="text-xs sm:text-sm font-semibold text-white hover:text-cyan-300 transition-colors"
+                        className="text-xs sm:text-sm font-semibold text-white hover:text-cyan-300 transition-colors break-all"
                       >
                         {emailAddress}
                       </a>
@@ -140,7 +203,7 @@ export const Contact: React.FC = () => {
 
                   <button
                     onClick={handleCopyEmail}
-                    className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                    className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors flex-shrink-0 ml-2"
                     title="Copy Email"
                   >
                     {copied ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
@@ -151,7 +214,7 @@ export const Contact: React.FC = () => {
                 <a
                   href={linkedinUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   onMouseEnter={() => soundManager.playHover()}
                   className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 transition-all group"
                 >
@@ -175,7 +238,7 @@ export const Contact: React.FC = () => {
                 <a
                   href={githubUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   onMouseEnter={() => soundManager.playHover()}
                   className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 hover:border-purple-500/40 transition-all group"
                 >
@@ -198,7 +261,7 @@ export const Contact: React.FC = () => {
                 {/* Location Badge */}
                 <div className="flex items-center gap-3 p-3.5 rounded-2xl bg-slate-900/40 border border-slate-800/60 text-xs text-slate-400">
                   <MapPin className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                  <span>Tamil Nadu, India • Open for Full-Time & Internship Opportunities</span>
+                  <span>Tamil Nadu, India</span>
                 </div>
               </div>
             </div>
@@ -221,7 +284,7 @@ export const Contact: React.FC = () => {
                 Send a Message
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mb-6">
-                Fill out the form below to transmit directly to my inbox with instant notification.
+                Deliver your message directly to my inbox at <span className="text-cyan-300 font-mono">{emailAddress}</span>.
               </p>
 
               {errorMessage && (
@@ -242,10 +305,10 @@ export const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-white">
-                      Message Formulated Successfully!
+                      Message Sent Successfully!
                     </h4>
                     <p className="text-xs text-slate-300 mt-1 max-w-md mx-auto">
-                      Thank you, <span className="text-cyan-300 font-semibold">{formData.name}</span>. Your dispatch has been prepared and queued to <span className="text-emerald-400 font-mono font-semibold">{emailAddress}</span>.
+                      Thank you, <span className="text-cyan-300 font-semibold">{formData.name}</span>. Your message has been dispatched {deliveryMethod === 'service' ? 'via direct inbox delivery' : 'via default email client'} to <span className="text-emerald-400 font-mono font-semibold">{emailAddress}</span>.
                     </p>
                   </div>
 
@@ -253,7 +316,7 @@ export const Contact: React.FC = () => {
                     <button
                       onClick={() => {
                         setIsSent(false);
-                        setFormData({ name: '', email: '', subject: '', message: '' });
+                        setFormData({ name: '', email: '', message: '', botcheck: '' });
                       }}
                       className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:text-white"
                     >
@@ -263,84 +326,89 @@ export const Contact: React.FC = () => {
                       href={`mailto:${emailAddress}`}
                       className="px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30"
                     >
-                      Open Email App Directly
+                      Open Email Client
                     </a>
                   </div>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Anti-spam Honeypot field (hidden from genuine users) */}
+                  <input
+                    type="text"
+                    name="botcheck"
+                    value={formData.botcheck}
+                    onChange={(e) => setFormData({ ...formData, botcheck: e.target.value })}
+                    className="hidden"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Name */}
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-slate-300 font-mono">
-                        Your Name *
+                        Name *
                       </label>
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Alex Morgan"
+                        placeholder="Your Name"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-xs sm:text-sm text-white placeholder-slate-500"
+                        disabled={isSubmitting}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-xs sm:text-sm text-white placeholder-slate-500 disabled:opacity-50"
                       />
                     </div>
 
+                    {/* Email */}
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-slate-300 font-mono">
-                        Your Email *
+                        Email *
                       </label>
                       <input
                         type="email"
                         required
-                        placeholder="alex@example.com"
+                        placeholder="your.email@example.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-xs sm:text-sm text-white placeholder-slate-500"
+                        disabled={isSubmitting}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-xs sm:text-sm text-white placeholder-slate-500 disabled:opacity-50"
                       />
                     </div>
                   </div>
 
+                  {/* Message */}
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-300 font-mono">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Project Collaboration / Job Inquiry"
-                      value={formData.subject}
-                      onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-xs sm:text-sm text-white placeholder-slate-500"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300 font-mono">
-                      Your Message *
+                      Message *
                     </label>
                     <textarea
                       required
                       rows={5}
-                      placeholder="Share your project vision, opportunity details, or questions..."
+                      placeholder="Write your message here..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-xs sm:text-sm text-white placeholder-slate-500 resize-none"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700/80 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-xs sm:text-sm text-white placeholder-slate-500 resize-none disabled:opacity-50"
                     />
                   </div>
 
+                  {/* Submit Button (Exact text: Send Message) */}
                   <button
                     type="submit"
                     disabled={isSubmitting}
                     onMouseEnter={() => soundManager.playHover()}
-                    className="w-full py-3.5 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 hover:from-cyan-200 hover:to-sky-300 shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all flex items-center justify-center gap-2 transform active:scale-[0.99]"
+                    className="w-full py-3.5 rounded-xl font-bold text-sm text-slate-950 bg-gradient-to-r from-cyan-300 via-cyan-400 to-sky-400 hover:from-cyan-200 hover:to-sky-300 shadow-[0_0_25px_rgba(0,240,255,0.4)] transition-all flex items-center justify-center gap-2 transform active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-2 text-slate-900 font-bold">
                         <span className="w-4 h-4 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" />
-                        Transmitting Message...
+                        Sending...
                       </span>
                     ) : (
                       <>
                         <Send className="w-4 h-4" />
-                        <span>Send Message Across Cosmos</span>
+                        <span>Send Message</span>
                       </>
                     )}
                   </button>

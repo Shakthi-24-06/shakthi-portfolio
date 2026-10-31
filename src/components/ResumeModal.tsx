@@ -93,8 +93,8 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               <div className="text-xs space-y-1 sm:text-right text-slate-400">
                 <div className="flex sm:justify-end items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5 text-cyan-400" />
-                  <a href="mailto:sshakthi1024@gmail.com" className="hover:text-cyan-300">
-                    sshakthi1024@gmail.com
+                  <a href="mailto:ssshakthi1024@gmail.com" className="hover:text-cyan-300">
+                    ssshakthi1024@gmail.com
                   </a>
                 </div>
                 <div className="flex sm:justify-end items-center gap-1.5">
@@ -127,6 +127,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               </p>
             </div>
 
+            {/* Clean Education */}
             <div>
               <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
                 <Award className="w-4 h-4" /> Education
@@ -135,7 +136,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                 <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                   <div>
                     <h3 className="font-bold text-white text-sm">
-                      Bachelor of Computer Applications (BCA)
+                      BCA (Bachelor of Computer Applications)
                     </h3>
                     <p className="text-xs text-slate-400">
                       Govindammal Aditanar College for Women
@@ -145,14 +146,14 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                     <span className="inline-block px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs border border-cyan-500/30">
                       CGPA: 8.19
                     </span>
-                    <p className="text-[11px] text-slate-400 mt-1">2023 – 2026</p>
+                    <p className="text-[11px] text-slate-400 mt-1">2023–2026</p>
                   </div>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
                   <div>
                     <h3 className="font-bold text-white text-sm">
-                      Higher Secondary Certificate (HSC)
+                      HSC (Higher Secondary Certificate)
                     </h3>
                     <p className="text-xs text-slate-400">
                       Elliott Tuxford Girls Higher Secondary School
@@ -160,14 +161,15 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                   </div>
                   <div className="sm:text-right">
                     <span className="inline-block px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold text-xs border border-purple-500/30">
-                      Score: 85.6%
+                      Percentage: 85.6%
                     </span>
-                    <p className="text-[11px] text-slate-400 mt-1">2022 – 2023</p>
+                    <p className="text-[11px] text-slate-400 mt-1">2022–2023</p>
                   </div>
                 </div>
               </div>
             </div>
 
+            {/* Experience */}
             <div>
               <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
                 <Briefcase className="w-4 h-4" /> Internship Experience
@@ -179,21 +181,21 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                       Full Stack Developer Intern
                     </h3>
                     <p className="text-xs text-cyan-300 font-medium">
-                      Tonyshive Company, Erode
+                      Tonyshive Private Limited, Erode
                     </p>
                   </div>
                   <span className="text-xs text-slate-400 font-mono">
-                    May 2025 – June 2025
+                    May 14 – June 14
                   </span>
                 </div>
                 <ul className="list-disc list-inside text-xs text-slate-300 space-y-1.5 pl-1">
                   <li>Developed an Employee Management System with comprehensive end-to-end functionality.</li>
                   <li>Implemented full CRUD (Create, Read, Update, Delete) database workflows.</li>
                   <li>Managed sensitive employee personal, banking, and company asset records securely.</li>
-                  <li>Engineered automated PDF and Excel reporting export functionality for administrative staff.</li>
+                  <li>Programmed automated PDF and Excel reporting export functionality for administrative staff.</li>
                 </ul>
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  {['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL'].map((t) => (
+                  {['HTML', 'CSS', 'PHP', 'MySQL'].map((t) => (
                     <span key={t} className="px-2 py-0.5 rounded bg-slate-700/80 text-[10px] text-slate-200">
                       {t}
                     </span>
@@ -202,6 +204,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               </div>
             </div>
 
+            {/* Featured Projects */}
             <div>
               <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
                 <Code className="w-4 h-4" /> Featured Projects
@@ -214,12 +217,12 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                         Water Beacon — Smart RO Water Availability and Monitoring System
                       </h3>
                       <p className="text-xs text-slate-400">
-                        Community Web Platform
+                        Web-based Platform
                       </p>
                     </div>
                   </div>
                   <p className="text-xs text-slate-300">
-                    A web-based platform that helps villagers check the availability of drinking water at RO machines before visiting the station. Features RO status monitoring (Available, Empty, Repair), public & admin dashboards, last-updated timestamps, English and Tamil language support, and cloud database persistence.
+                    A web-based application that allows villagers to check the availability of drinking water at RO machines before visiting the station. Features RO machine availability monitoring (Available, Empty, Repair status), admin & public dashboards, last updated timestamp, and responsive interface.
                   </p>
                   <div className="flex flex-wrap gap-1.5 pt-1">
                     {['HTML', 'CSS', 'JavaScript', 'Python', 'Flask', 'TiDB Cloud'].map((t) => (
@@ -236,14 +239,14 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                       Leaf Disease Detection Using Canny Edge Algorithm
                     </h3>
                     <p className="text-xs text-slate-400">
-                      Computer Vision & Image Processing Application
+                      Image Processing Application
                     </p>
                   </div>
                   <p className="text-xs text-slate-300">
-                    An image-processing application that highlights potentially damaged regions in crop leaf images using the Canny Edge Detection algorithm with multi-stage noise filtering, gradient magnitude calculation, and hysteresis thresholding.
+                    An image-processing application that uses Canny Edge Detection to identify potentially damaged regions in crop leaf images and display results with remedies through a 4-stage pipeline: Gaussian Blur, Canny Edge Detection, Mask Overlay, and Prediction & Remedy.
                   </p>
                   <div className="flex flex-wrap gap-1.5 pt-1">
-                    {['Python', 'OpenCV', 'Image Processing'].map((t) => (
+                    {['Python', 'OpenCV', 'Image Processing', 'Canny Edge Detection'].map((t) => (
                       <span key={t} className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 text-[10px] border border-emerald-500/20">
                         {t}
                       </span>
@@ -253,6 +256,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               </div>
             </div>
 
+            {/* Technical Skills */}
             <div>
               <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
                 <CheckCircle className="w-4 h-4" /> Technical Skills
