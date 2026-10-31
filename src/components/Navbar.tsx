@@ -115,27 +115,32 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Sound Synthesizer Toggle */}
+          {/* Background Music Toggle */}
           <button
             onClick={toggleSound}
             onMouseEnter={() => soundManager.playHover()}
-            className={`p-2 rounded-xl border text-xs flex items-center gap-1.5 transition-all ${
+            className={`px-3 py-2 rounded-xl border text-xs flex items-center gap-2 transition-all ${
               !isMuted
-                ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.3)]'
+                ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.4)]'
                 : 'bg-slate-900/70 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
             }`}
-            title={isMuted ? 'Turn Sound ON' : 'Turn Sound OFF'}
-            aria-label="Sound synthesizer toggle"
+            title={isMuted ? 'Play Dreamy Background Music' : 'Pause Background Music'}
+            aria-label="Background music toggle"
           >
             {!isMuted ? (
               <>
-                <Volume2 className="w-4 h-4 text-cyan-400" />
-                <span className="hidden sm:inline text-[11px] font-mono font-medium">Sound ON</span>
+                <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />
+                <span className="hidden sm:inline text-[11px] font-mono font-medium text-cyan-300">Music ON</span>
+                <span className="hidden sm:flex gap-0.5 items-end h-3">
+                  <span className="w-0.5 h-2 bg-cyan-400 animate-pulse" />
+                  <span className="w-0.5 h-3 bg-cyan-400 animate-pulse" style={{ animationDelay: '150ms' }} />
+                  <span className="w-0.5 h-1.5 bg-cyan-400 animate-pulse" style={{ animationDelay: '300ms' }} />
+                </span>
               </>
             ) : (
               <>
                 <VolumeX className="w-4 h-4" />
-                <span className="hidden sm:inline text-[11px] font-mono font-medium">Muted</span>
+                <span className="hidden sm:inline text-[11px] font-mono font-medium">Music OFF</span>
               </>
             )}
           </button>
