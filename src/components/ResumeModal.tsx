@@ -18,7 +18,13 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
 
   const handleDownload = () => {
     soundManager.playClick();
-    window.print();
+    const link = document.createElement('a');
+    link.href = '/resume/Shakthi_Sivakumar_Resume.pdf';
+    link.download = 'Shakthi_Sivakumar_Resume.pdf';
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
