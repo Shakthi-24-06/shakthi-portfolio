@@ -185,7 +185,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                     </p>
                   </div>
                   <span className="text-xs text-slate-400 font-mono">
-                    May 14 – June 14
+                    May 2025 – June 2025
                   </span>
                 </div>
                 <ul className="list-disc list-inside text-xs text-slate-300 space-y-1.5 pl-1">
@@ -195,7 +195,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
                   <li>Programmed automated PDF and Excel reporting export functionality for administrative staff.</li>
                 </ul>
                 <div className="flex flex-wrap gap-1.5 pt-1">
-                  {['HTML', 'CSS', 'PHP', 'MySQL'].map((t) => (
+                  {['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL'].map((t) => (
                     <span key={t} className="px-2 py-0.5 rounded bg-slate-700/80 text-[10px] text-slate-200">
                       {t}
                     </span>

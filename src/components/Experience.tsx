@@ -118,7 +118,7 @@ export const Experience: React.FC = () => {
 
                 <div className="self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-purple-300 flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-purple-400" />
-                  <span>May 14 – June 14</span>
+                  <span>May 2025 – June 2025</span>
                 </div>
               </div>
 
@@ -159,7 +159,7 @@ export const Experience: React.FC = () => {
                   Technologies:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {['HTML', 'CSS', 'PHP', 'MySQL'].map((tech) => (
+                  {['HTML', 'CSS','JavaScript', 'PHP', 'MySQL'].map((tech) => (
                     <span
                       key={tech}
                       className="px-2.5 py-1 rounded-lg bg-slate-900 border border-purple-500/25 text-purple-300 text-xs font-mono"
