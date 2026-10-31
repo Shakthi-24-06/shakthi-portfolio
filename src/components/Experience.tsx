@@ -8,7 +8,7 @@ export const Experience: React.FC = () => {
     {
       title: 'Employee Management System Architecture',
       description:
-        'Engineered an end-to-end full stack web application to manage workforce records across administrative departments.',
+        'Engineered an end-to-end web application to manage workforce records across administrative departments.',
       icon: Server,
     },
     {
@@ -20,7 +20,7 @@ export const Experience: React.FC = () => {
     {
       title: 'Personal, Bank & Asset Record Security',
       description:
-        'Structured confidential tables ensuring secure handling of employee identity, sensitive banking details, and hardware asset allocations.',
+        'Structured confidential tables ensuring secure handling of employee identity, sensitive banking details, and company asset allocations.',
       icon: Layers,
     },
     {
@@ -48,11 +48,12 @@ export const Experience: React.FC = () => {
             My Professional Journey
           </h2>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl mx-auto">
-            Hands-on commercial software development experience delivering production-ready business management tools.
+            Commercial software development experience delivering production-ready business management tools.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          {/* Left Column: Character */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
             <div className="relative">
               <AnimeCharacter pose="experience" size="lg" interactive={true} />
@@ -70,7 +71,7 @@ export const Experience: React.FC = () => {
                     Internship
                   </div>
                   <div className="text-xs font-bold text-white">
-                    Tonyshive Company
+                    Tonyshive Pvt Ltd
                   </div>
                 </div>
               </motion.div>
@@ -88,6 +89,7 @@ export const Experience: React.FC = () => {
             </div>
           </div>
 
+          {/* Right Column: Experience Details */}
           <div className="lg:col-span-7">
             <motion.div
               initial={{ opacity: 0, y: 25 }}
@@ -102,7 +104,7 @@ export const Experience: React.FC = () => {
                     FULL STACK DEVELOPER INTERN
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-2 font-['Outfit']">
-                    Tonyshive Company
+                    Tonyshive Private Limited
                   </h3>
                   <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
                     <span className="flex items-center gap-1">
@@ -110,19 +112,19 @@ export const Experience: React.FC = () => {
                       <span>Erode, Tamil Nadu</span>
                     </span>
                     <span className="text-slate-600">•</span>
-                    <span className="text-cyan-400 font-medium">Software Engineering Division</span>
+                    <span className="text-cyan-400 font-medium">Employee Management System</span>
                   </div>
                 </div>
 
                 <div className="self-start sm:self-auto px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-purple-300 flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-purple-400" />
-                  <span>May 2025 – June 2025</span>
+                  <span>May 14 – June 14</span>
                 </div>
               </div>
 
               <div className="mt-6 space-y-4">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
-                  Key Technical Responsibilities & Achievements
+                  Key Technical Responsibilities
                 </h4>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -154,10 +156,10 @@ export const Experience: React.FC = () => {
 
               <div className="mt-6 pt-6 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
-                  Stack Employed:
+                  Technologies:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
-                  {['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL'].map((tech) => (
+                  {['HTML', 'CSS', 'PHP', 'MySQL'].map((tech) => (
                     <span
                       key={tech}
                       className="px-2.5 py-1 rounded-lg bg-slate-900 border border-purple-500/25 text-purple-300 text-xs font-mono"
