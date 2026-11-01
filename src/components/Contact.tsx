@@ -21,7 +21,7 @@ export const Contact: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showMailtoFallback, setShowMailtoFallback] = useState(false);
 
-  const emailAddress = 'ssshakthi1024@gmail.com';
+  const emailAddress = 'sshakthi1024@gmail.com';
   const linkedinUrl = 'https://www.linkedin.com/in/shakthi-sivakumar';
   const githubUrl = 'https://github.com/Shakthi-24-06';
 

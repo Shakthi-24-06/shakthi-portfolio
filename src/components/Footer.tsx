@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
             </a>
 
             <a
-              href="mailto:ssshakthi1024@gmail.com"
+              href="mailto:sshakthi1024@gmail.com"
               onMouseEnter={() => soundManager.playHover()}
               className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-purple-300 hover:border-purple-500/50 hover:shadow-[0_0_15px_rgba(168,85,247,0.3)] transition-all"
               aria-label="Send Email"
