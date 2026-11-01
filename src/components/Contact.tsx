@@ -177,13 +177,13 @@ export const Contact: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-[10px] uppercase font-mono text-slate-400">
-                        Email Channel
+                        Email Address
                       </div>
                       <a
                         href={`mailto:${emailAddress}`}
-                        className="text-xs sm:text-sm font-semibold text-white hover:text-cyan-300 transition-colors"
+                        className="text-xs sm:text-sm font-semibold text-white hover:text-cyan-300 transition-colors break-all"
                       >
-                        Send an Email
+                        {emailAddress}
                       </a>
                     </div>
                   </div>
