@@ -21,7 +21,7 @@ export const Contact: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [showMailtoFallback, setShowMailtoFallback] = useState(false);
 
-  const emailAddress = 'sshakthi1024@gmail.com';
+  const emailAddress = 'ssshakthi1024@gmail.com';
   const linkedinUrl = 'https://www.linkedin.com/in/shakthi-sivakumar';
   const githubUrl = 'https://github.com/Shakthi-24-06';
 
@@ -86,7 +86,7 @@ export const Contact: React.FC = () => {
       setIsSubmitting(false);
       setShowMailtoFallback(true);
       setErrorMessage(
-        'Direct Gmail delivery setup pending: Please configure VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_EMAILJS_PUBLIC_KEY in your .env file. In the meantime, you can click below to send directly via your email client.'
+        'Direct delivery setup pending: Please configure VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_EMAILJS_PUBLIC_KEY in your .env file. In the meantime, you can click below to send directly via your email client.'
       );
       return;
     }
@@ -328,7 +328,7 @@ export const Contact: React.FC = () => {
                       href={`mailto:${emailAddress}`}
                       className="px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-colors"
                     >
-                      Direct Gmail
+                      Direct Email
                     </a>
                   </div>
                 </motion.div>

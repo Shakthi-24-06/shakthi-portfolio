@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Sparkles, ChevronRight, Terminal } from 'lucide-react';
+import { Eye, Sparkles, ChevronRight, Terminal } from 'lucide-react';
 import { AnimeCharacter } from './AnimeCharacter';
 import { soundManager } from '../utils/soundEffects';
 
@@ -15,12 +15,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleDownloadClick = () => {
-    soundManager.playClick();
-    if (onOpenResume) {
-      // Optional callback support
-    }
-  };
 
   return (
     <section
@@ -94,20 +88,19 @@ export const Hero: React.FC<HeroProps> = ({ onOpenResume }) => {
               <ChevronRight className="w-4 h-4" />
             </button>
 
-            {/* Original Resume Download Button */}
-            <a
-              href="/resume/Shakthi_Sivakumar_Resume.pdf"
-              download="Shakthi_Sivakumar_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleDownloadClick}
+            {/* View Resume Button (Opens Resume Viewer Modal) */}
+            <button
+              onClick={() => {
+                soundManager.playClick();
+                onOpenResume?.();
+              }}
               onMouseEnter={() => soundManager.playHover()}
-              className="px-6 py-3.5 rounded-xl font-semibold text-sm text-cyan-300 glass-panel border border-cyan-500/40 hover:bg-cyan-950/40 hover:border-cyan-400 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2 shadow-lg"
-              aria-label="Download Shakthi Sivakumar Original Resume PDF"
+              className="px-6 py-3.5 rounded-xl font-semibold text-sm text-cyan-300 glass-panel border border-cyan-500/40 hover:bg-cyan-950/40 hover:border-cyan-400 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2 shadow-lg cursor-pointer"
+              aria-label="View Shakthi Sivakumar Resume"
             >
-              <FileText className="w-4 h-4" />
-              <span>Download Resume</span>
-            </a>
+              <Eye className="w-4 h-4 text-cyan-400" />
+              <span>View Resume</span>
+            </button>
           </div>
         </motion.div>
 

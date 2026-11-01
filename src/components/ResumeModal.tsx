@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Download, Printer, ExternalLink, Mail, MapPin, Award, BookOpen, Briefcase, Code, CheckCircle } from 'lucide-react';
+import { X, Download, ExternalLink, FileText, ZoomIn, ZoomOut } from 'lucide-react';
 import { soundManager } from '../utils/soundEffects';
 
 interface ResumeModalProps {
@@ -9,27 +9,39 @@ interface ResumeModalProps {
 }
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
-  if (!isOpen) return null;
+  const [zoom, setZoom] = useState(1);
 
-  const handlePrint = () => {
-    soundManager.playClick();
-    window.print();
-  };
+  if (!isOpen) return null;
 
   const handleDownload = () => {
     soundManager.playClick();
     const link = document.createElement('a');
-    link.href = '/resume/Shakthi_Sivakumar_Resume.pdf';
+    link.href = '/resume/resume_shakthi.pdf';
     link.download = 'Shakthi_Sivakumar_Resume.pdf';
-    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  const handleZoomIn = () => {
+    soundManager.playClick();
+    setZoom((prev) => Math.min(prev + 0.25, 2));
+  };
+
+  const handleZoomOut = () => {
+    soundManager.playClick();
+    setZoom((prev) => Math.max(prev - 0.25, 0.75));
+  };
+
+  const handleResetZoom = () => {
+    soundManager.playClick();
+    setZoom(1);
+  };
+
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+        {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -38,262 +50,129 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
             soundManager.playClick();
             onClose();
           }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-md"
+          className="fixed inset-0 bg-black/85 backdrop-blur-md"
         />
 
+        {/* Modal Window */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-4xl bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden z-10 my-8 max-h-[90vh] flex flex-col"
+          className="relative w-full max-w-4xl bg-[#090d1a] border border-cyan-500/30 rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.9)] overflow-hidden z-10 my-4 max-h-[92vh] flex flex-col"
         >
-          <div className="px-6 py-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Award className="w-5 h-5 text-cyan-400" />
-              <h3 className="font-bold text-slate-100 text-sm sm:text-base">
-                Shakthi Sivakumar — Official Resume
-              </h3>
+          {/* Header */}
+          <div className="px-5 py-3.5 bg-slate-950/90 border-b border-slate-800 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0">
+                <FileText className="w-4 h-4" />
+              </div>
+              <div className="truncate">
+                <h3 className="font-bold text-white text-sm sm:text-base truncate font-['Outfit']">
+                  Shakthi Sivakumar — Resume
+                </h3>
+                <p className="text-[11px] text-slate-400 font-mono hidden sm:block">
+                  Shakthi_Sivakumar_Resume.pdf
+                </p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handlePrint}
-                className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium flex items-center gap-1.5 transition-colors"
-                title="Print or Save as PDF"
+
+            {/* Header Controls */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {/* Zoom Controls */}
+              <div className="hidden md:flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+                <button
+                  onClick={handleZoomOut}
+                  disabled={zoom <= 0.75}
+                  className="p-1.5 text-slate-400 hover:text-white disabled:opacity-30 transition-colors cursor-pointer"
+                  title="Zoom Out"
+                >
+                  <ZoomOut className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={handleResetZoom}
+                  className="px-2 text-[10px] font-mono text-cyan-400 hover:text-cyan-300 cursor-pointer"
+                  title="Reset Zoom"
+                >
+                  {Math.round(zoom * 100)}%
+                </button>
+                <button
+                  onClick={handleZoomIn}
+                  disabled={zoom >= 2}
+                  className="p-1.5 text-slate-400 hover:text-white disabled:opacity-30 transition-colors cursor-pointer"
+                  title="Zoom In"
+                >
+                  <ZoomIn className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* Open PDF in New Tab */}
+              <a
+                href="/resume/resume_shakthi.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => soundManager.playHover()}
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white text-xs font-medium transition-colors"
+                title="Open PDF in new tab"
               >
-                <Printer className="w-3.5 h-3.5 text-cyan-400" />
-                <span className="hidden sm:inline">Print / Save PDF</span>
-              </button>
+                <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Open PDF</span>
+              </a>
+
+              {/* Prominent Download Button */}
               <button
                 onClick={handleDownload}
-                className="px-3 py-1.5 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-medium flex items-center gap-1.5 transition-colors"
+                onMouseEnter={() => soundManager.playHover()}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-cyan-400 to-sky-400 hover:from-cyan-300 hover:to-sky-300 text-slate-950 text-xs font-bold shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all cursor-pointer"
+                title="Download Resume PDF"
               >
                 <Download className="w-3.5 h-3.5" />
-                <span>Download</span>
+                <span>Download Resume</span>
               </button>
+
+              {/* Close Button */}
               <button
                 onClick={() => {
                   soundManager.playClick();
                   onClose();
                 }}
-                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                className="p-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition-colors ml-1 cursor-pointer"
+                title="Close"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          <div className="p-6 sm:p-10 overflow-y-auto bg-slate-900 text-slate-300 space-y-8 font-sans">
-            <div className="border-b border-slate-800 pb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  SHAKTHI SIVAKUMAR
-                </h1>
-                <p className="text-cyan-400 font-semibold text-base mt-1">
-                  Full Stack Developer
-                </p>
-                <p className="text-slate-400 text-xs sm:text-sm mt-1 italic">
-                  "Turning ideas into meaningful digital experiences."
-                </p>
-              </div>
+          {/* Modal Body: Resume Image Display */}
+          <div className="flex-1 overflow-auto p-4 sm:p-8 bg-[#040714] flex flex-col items-center">
+            <div
+              className="transition-transform duration-200 ease-out flex justify-center w-full"
+              style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}
+            >
+              <img
+                src="/resume/resume_preview.png"
+                alt="Shakthi Sivakumar Resume"
+                className="w-full max-w-2xl rounded-xl border border-slate-800/80 shadow-[0_20px_50px_rgba(0,0,0,0.9)] object-contain select-none bg-white"
+                loading="eager"
+              />
+            </div>
+          </div>
 
-              <div className="text-xs space-y-1 sm:text-right text-slate-400">
-                <div className="flex sm:justify-end items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5 text-cyan-400" />
-                  <a href="mailto:sshakthi1024@gmail.com" className="hover:text-cyan-300">
-                    sshakthi1024@gmail.com
-                  </a>
-                </div>
-                <div className="flex sm:justify-end items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Tamil Nadu, India</span>
-                </div>
-                <div className="flex sm:justify-end items-center gap-1.5">
-                  <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
-                  <a
-                    href="https://github.com/Shakthi-24-06"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-cyan-300"
-                  >
-                    github.com/Shakthi-24-06
-                  </a>
-                </div>
-              </div>
+          {/* Modal Footer: Sticky Download Bar */}
+          <div className="px-5 py-3 bg-slate-950/90 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="text-xs text-slate-400 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Full Stack Developer • BCA Graduate</span>
             </div>
 
-            <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-2 flex items-center gap-2">
-                <BookOpen className="w-4 h-4" /> Profile Summary
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                BCA graduate passionate about web development and building practical digital solutions.
-                Hands-on experience in full-stack architecture utilizing Python, Flask, JavaScript, MySQL,
-                and TiDB Cloud. Skilled in developing responsive interfaces, database integration, CRUD
-                pipelines, and computer vision image processing algorithms.
-              </p>
-            </div>
-
-            {/* Clean Education */}
-            <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
-                <Award className="w-4 h-4" /> Education
-              </h2>
-              <div className="space-y-4">
-                <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                  <div>
-                    <h3 className="font-bold text-white text-sm">
-                      BCA (Bachelor of Computer Applications)
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      Govindammal Aditanar College for Women
-                    </p>
-                  </div>
-                  <div className="sm:text-right">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-bold text-xs border border-cyan-500/30">
-                      CGPA: 8.19
-                    </span>
-                    <p className="text-[11px] text-slate-400 mt-1">2023–2026</p>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                  <div>
-                    <h3 className="font-bold text-white text-sm">
-                      HSC (Higher Secondary Certificate)
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      Elliott Tuxford Girls Higher Secondary School
-                    </p>
-                  </div>
-                  <div className="sm:text-right">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 font-bold text-xs border border-purple-500/30">
-                      Percentage: 85.6%
-                    </span>
-                    <p className="text-[11px] text-slate-400 mt-1">2022–2023</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Experience */}
-            <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
-                <Briefcase className="w-4 h-4" /> Internship Experience
-              </h2>
-              <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/50 space-y-3">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
-                  <div>
-                    <h3 className="font-bold text-white text-sm">
-                      Full Stack Developer Intern
-                    </h3>
-                    <p className="text-xs text-cyan-300 font-medium">
-                      Tonyshive Private Limited, Erode
-                    </p>
-                  </div>
-                  <span className="text-xs text-slate-400 font-mono">
-                    May 2025 – June 2025
-                  </span>
-                </div>
-                <ul className="list-disc list-inside text-xs text-slate-300 space-y-1.5 pl-1">
-                  <li>Developed an Employee Management System with comprehensive end-to-end functionality.</li>
-                  <li>Implemented full CRUD (Create, Read, Update, Delete) database workflows.</li>
-                  <li>Managed sensitive employee personal, banking, and company asset records securely.</li>
-                  <li>Programmed automated PDF and Excel reporting export functionality for administrative staff.</li>
-                </ul>
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {['HTML', 'CSS', 'JavaScript', 'PHP', 'MySQL'].map((t) => (
-                    <span key={t} className="px-2 py-0.5 rounded bg-slate-700/80 text-[10px] text-slate-200">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Featured Projects */}
-            <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
-                <Code className="w-4 h-4" /> Featured Projects
-              </h2>
-              <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/50 space-y-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-bold text-white text-sm">
-                        Water Beacon — Smart RO Water Availability and Monitoring System
-                      </h3>
-                      <p className="text-xs text-slate-400">
-                        Web-based Platform
-                      </p>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-300">
-                    A web-based application that allows villagers to check the availability of drinking water at RO machines before visiting the station. Features RO machine availability monitoring (Available, Empty, Repair status), admin & public dashboards, last updated timestamp, and responsive interface.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {['HTML', 'CSS', 'JavaScript', 'Python', 'Flask', 'TiDB Cloud'].map((t) => (
-                      <span key={t} className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 text-[10px] border border-cyan-500/20">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/50 space-y-2">
-                  <div>
-                    <h3 className="font-bold text-white text-sm">
-                      Leaf Disease Detection Using Canny Edge Algorithm
-                    </h3>
-                    <p className="text-xs text-slate-400">
-                      Image Processing Application
-                    </p>
-                  </div>
-                  <p className="text-xs text-slate-300">
-                    An image-processing application that uses Canny Edge Detection to identify potentially damaged regions in crop leaf images and display results with remedies through a 4-stage pipeline: Gaussian Blur, Canny Edge Detection, Mask Overlay, and Prediction & Remedy.
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {['Python', 'OpenCV', 'Image Processing', 'Canny Edge Detection'].map((t) => (
-                      <span key={t} className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 text-[10px] border border-emerald-500/20">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Technical Skills */}
-            <div>
-              <h2 className="text-sm font-bold uppercase tracking-wider text-cyan-400 mb-3 flex items-center gap-2">
-                <CheckCircle className="w-4 h-4" /> Technical Skills
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-800">
-                  <span className="font-semibold text-white block mb-1">Programming:</span>
-                  <span className="text-slate-400">Python, JavaScript, SQL</span>
-                </div>
-                <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-800">
-                  <span className="font-semibold text-white block mb-1">Frontend:</span>
-                  <span className="text-slate-400">HTML5, CSS3, Responsive Web Design</span>
-                </div>
-                <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-800">
-                  <span className="font-semibold text-white block mb-1">Backend:</span>
-                  <span className="text-slate-400">Python, Flask</span>
-                </div>
-                <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-800">
-                  <span className="font-semibold text-white block mb-1">Databases:</span>
-                  <span className="text-slate-400">MySQL, TiDB Cloud</span>
-                </div>
-                <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-800">
-                  <span className="font-semibold text-white block mb-1">Developer Tools:</span>
-                  <span className="text-slate-400">Git, GitHub, Visual Studio Code</span>
-                </div>
-                <div className="p-3 rounded-lg bg-slate-800/40 border border-slate-800">
-                  <span className="font-semibold text-white block mb-1">Core Concepts:</span>
-                  <span className="text-slate-400">CRUD Operations, Version Control, Database Management, Cloud Database Integration</span>
-                </div>
-              </div>
-            </div>
+            <button
+              onClick={handleDownload}
+              onMouseEnter={() => soundManager.playHover()}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 hover:text-white text-xs font-bold transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] cursor-pointer"
+            >
+              <Download className="w-4 h-4" />
+              <span>Download Resume (PDF)</span>
+            </button>
           </div>
         </motion.div>
       </div>
