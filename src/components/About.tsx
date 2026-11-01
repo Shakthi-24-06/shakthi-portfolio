@@ -7,7 +7,7 @@ import { soundManager } from '../utils/soundEffects';
 export const About: React.FC = () => {
   const educationItems = [
     {
-      label: 'EDUCATION 01',
+      label: 'COLLEGE',
       courseLabel: 'Course',
       course: 'BCA',
       institutionLabel: 'College',
@@ -18,7 +18,7 @@ export const About: React.FC = () => {
       scoreBadge: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/40 shadow-[0_0_15px_rgba(0,240,255,0.2)]',
     },
     {
-      label: 'EDUCATION 02',
+      label: 'SCHOOL',
       courseLabel: 'Course',
       course: 'HSC',
       institutionLabel: 'School',
