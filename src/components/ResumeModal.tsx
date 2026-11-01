@@ -157,23 +157,6 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
               />
             </div>
           </div>
-
-          {/* Modal Footer: Sticky Download Bar */}
-          <div className="px-5 py-3 bg-slate-950/90 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <div className="text-xs text-slate-400 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Full Stack Developer • BCA Graduate</span>
-            </div>
-
-            <button
-              onClick={handleDownload}
-              onMouseEnter={() => soundManager.playHover()}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 hover:text-white text-xs font-bold transition-all shadow-[0_0_20px_rgba(0,240,255,0.2)] cursor-pointer"
-            >
-              <Download className="w-4 h-4" />
-              <span>Download Resume (PDF)</span>
-            </button>
-          </div>
         </motion.div>
       </div>
     </AnimatePresence>
