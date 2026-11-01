@@ -177,13 +177,13 @@ export const Contact: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-[10px] uppercase font-mono text-slate-400">
-                        Email Address
+                        Email Channel
                       </div>
                       <a
                         href={`mailto:${emailAddress}`}
-                        className="text-xs sm:text-sm font-semibold text-white hover:text-cyan-300 transition-colors break-all"
+                        className="text-xs sm:text-sm font-semibold text-white hover:text-cyan-300 transition-colors"
                       >
-                        {emailAddress}
+                        Send an Email
                       </a>
                     </div>
                   </div>
@@ -271,7 +271,7 @@ export const Contact: React.FC = () => {
                 Send a Message
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mb-6">
-                Deliver your message directly to my Gmail inbox at <span className="text-cyan-300 font-mono">{emailAddress}</span>.
+                Deliver your message directly to my inbox. I will get back to you as soon as possible.
               </p>
 
               {errorMessage && (
@@ -310,7 +310,7 @@ export const Contact: React.FC = () => {
                       Message Delivered Successfully!
                     </h4>
                     <p className="text-xs text-slate-300 mt-1 max-w-md mx-auto leading-relaxed">
-                      Thank you, <span className="text-cyan-300 font-semibold">{formData.name}</span>. Your message has reached <span className="text-emerald-400 font-mono font-semibold">{emailAddress}</span>. I will get back to you at <span className="text-cyan-300 font-mono">{formData.email}</span> shortly.
+                      Thank you, <span className="text-cyan-300 font-semibold">{formData.name}</span>. Your message has been sent successfully! I will get back to you at <span className="text-cyan-300 font-mono">{formData.email}</span> shortly.
                     </p>
                   </div>
 
@@ -320,16 +320,10 @@ export const Contact: React.FC = () => {
                         setIsSent(false);
                         setFormData({ name: '', email: '', message: '', botcheck: '' });
                       }}
-                      className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-300 hover:text-white transition-colors"
+                      className="px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
                     >
                       Send Another Message
                     </button>
-                    <a
-                      href={`mailto:${emailAddress}`}
-                      className="px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30 transition-colors"
-                    >
-                      Direct Email
-                    </a>
                   </div>
                 </motion.div>
               ) : (
